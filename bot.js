@@ -2,7 +2,7 @@ const Telegraf = require('telegraf');
 
 const mysql = require('mysql');
 
-const bot = new Telegraf('insert_botcode_here');
+const bot = new Telegraf('5563575168:AAGihQzIRllJwLtvDxwddji45ko9ViyyhWg');
 
 const con = mysql.createConnection({
     host: '127.0.0.1',
