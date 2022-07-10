@@ -1,3 +1,2 @@
-# Building a Telegram Bot with Node.js in 10 minutes
-
-Watch the Tutorial on [YouTube](https://youtu.be/IlsygSzikOQ)
+# telegram-chatbot-for-a--restaraunt
+a telegram chat-bot application build in node-js runtime environment and telegraf library 
