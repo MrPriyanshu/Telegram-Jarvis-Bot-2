@@ -1,36 +1,47 @@
-// Dependencies
+const TelegramBot = require('5563575168:AAGihQzIRllJwLtvDxwddji45ko9ViyyhWgi');
+const bot = new TelegramBot('5563575168:AAGihQzIRllJwLtvDxwddji45ko9ViyyhWg', { polling: true });
+const request = require('request');
 const express = require('express');
 const app = express();
-const axios = require('axios');
-const bodyParser = require('body-parser');
-const port = 80;
-const url = 'https://api.telegram.org/bot';
-const apiToken = '{5563575168:AAGihQzIRllJwLtvDxwddji45ko9ViyyhWg}';
-// Configurations
-app.use(bodyParser.json());
-// Endpoints
-app.post('/', (req, res) => {
-     // console.log(req.body);
-     const chatId = req.body.message.chat.id;
-     const sentMessage = req.body.message.text;
-     // Regex for hello
-     if (sentMessage.match(/hello/gi)) {
-          axios.post(`${url}${apiToken}/sendMessage`,
-               {
-                    chat_id: chatId,
-                    text: 'hello back 👋'
-               })
-               .then((response) => { 
-                    res.status(200).send(response);
-               }).catch((error) => {
-                    res.send(error);
-               });
-     } else {
-          // if no hello present, just respond with 200 
-          res.status(200).send({});
-     }
-});
-// Listening
-app.listen(port, () => {
-     console.log(`Listening on port ${port}`);
+
+require('dotenv').config();
+
+
+bot.onText(/\/movie (.+)/, (msg, match) => {
+    let movie = match[1];
+    let chatId = msg.chat.id;
+    request(`http://www.omdbapi.com/?apiKey=OMDAPIKEY=${movie}`, (error, response, body) => {
+        if (!error && response.statusCode == 200) {
+            bot.sendMessage(chatId, '_Looking for _' + movie + '...', { parse_mode: 'Markdown' })
+                .then((msg) => {
+                    let res = JSON.parse(body);
+                    bot.sendPhoto(chatId, res.Poster, { caption: 'Result: \nTitle: ' + res.Title + '\nYear: ' + res.Year + '\nRated: ' + res.Rated + '\nReleased: ' + res.Released + '\nRuntime: ' + res.Runtime + '\nGenre: ' + res.Genre + '\nDirector: ' + res.Director + '\nPlot: ' + res.Plot })
+                        .catch((err) => {
+                            if (err) {
+                                bot.sendMessage(chatId, 'Error in finding,Check the movie title');
+                            }
+                        })
+                })
+
+        }
+    })
 })
+
+
+
+
+// Get about Bot
+bot.onText(/\/about (.+)/, (msg, match) => {
+    if (match[1]) {
+        let chatId = msg.chat.id;
+        bot.sendMessage(chatId,
+            `finder bot\nbot where you can search for a movie and get details about it.`, { parse_mode: 'Markdown' });
+    }
+})
+
+const PORT = process.env.PORT || 3000;
+
+
+app.listen(PORT, function () {
+    console.log(`Server is running at port ${PORT}`);
+});
