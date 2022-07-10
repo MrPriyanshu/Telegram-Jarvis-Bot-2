@@ -4,8 +4,8 @@ const axios = require('axios')
 const bodyParser = require('body-parser')
 
 const { TOKEN, SERVER_URL } = process.env
-const TELEGRAM_API = `https://api.telegram.org/bot${TOKEN}`
-const URI = `/webhook/${TOKEN}`
+const TELEGRAM_API = `https://api.telegram.org/bot${5563575168:AAGihQzIRllJwLtvDxwddji45ko9ViyyhWg}`
+const URI = `/webhook/${5563575168:AAGihQzIRllJwLtvDxwddji45ko9ViyyhWg}`
 const WEBHOOK_URL = SERVER_URL + URI
 
 const app = express()
